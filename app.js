@@ -33,6 +33,8 @@ app.get("/", (req, res) => {
     res.send("Hi i am root");
 });
 
+// Serve static files from F:/data/images
+// app.use("/images", express.static("F:/data1/images"));
 
 //Index Route
 app.get("/listings", async (req, res) => {
@@ -45,6 +47,9 @@ app.get("/listings", async (req, res) => {
 app.get("/listings/new", (req, res) => {
     res.render("listings/new.ejs");
   });
+
+  
+
   
 //Show Route
 app.get("/listings/:id", async (req, res) => {
