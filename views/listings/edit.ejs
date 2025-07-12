@@ -4,7 +4,7 @@
   <div class="col-md-8 col-lg-6 shadow p-4 rounded bg-light">
     <h3 class="mb-4 text-center">Edit Your Listing</h3>
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
       <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -16,6 +16,8 @@
           class="form-control"
           required
         />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please enter a title.</div>
       </div>
 
       <!-- Description -->
@@ -26,10 +28,12 @@
           id="description"
           class="form-control"
           rows="3"
+          required
         ><%= listing.description %></textarea>
+        <div class="invalid-feedback">Please provide a description.</div>
       </div>
 
-      <!-- Image -->
+      <!-- Image URL -->
       <div class="mb-3">
         <label for="image" class="form-label">Image URL</label>
         <input
@@ -38,7 +42,9 @@
           value="<%= listing.image.url %>"
           type="text"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Please provide an image URL.</div>
       </div>
 
       <!-- Price & Country -->
@@ -51,8 +57,11 @@
             value="<%= listing.price %>"
             type="number"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Please enter a valid price.</div>
         </div>
+
         <div class="col-md-6 mb-3">
           <label for="country" class="form-label">Country</label>
           <input
@@ -61,7 +70,9 @@
             value="<%= listing.country %>"
             type="text"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Country name is required.</div>
         </div>
       </div>
 
@@ -74,7 +85,9 @@
           value="<%= listing.location %>"
           type="text"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Location is required.</div>
       </div>
 
       <div class="d-grid">
@@ -83,3 +96,21 @@
     </form>
   </div>
 </div>
+
+
+<!-- <script>
+  // Enable Bootstrap validation
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script> -->

@@ -4,7 +4,7 @@
   <div class="col-md-8 col-lg-6 shadow p-4 rounded bg-light">
     <h3 class="mb-4 text-center">Create a New Listing</h3>
 
-    <form method="POST" action="/listings">
+    <form method="POST" action="/listings" novalidate class="needs-validation">
       <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -16,6 +16,7 @@
           class="form-control"
           required
         />
+        <div class="valid-feedback"> Title looks good!</div>
       </div>
 
       <!-- Description -->
@@ -26,8 +27,10 @@
           id="description"
           placeholder="Enter description"
           class="form-control"
+          required
           rows="3"
         ></textarea>
+        <div class="invalid-feedback">Please enter a short Description</div>
       </div>
 
       <!-- Image URL -->
@@ -39,6 +42,7 @@
           placeholder="Enter image URL"
           type="text"
           class="form-control"
+        
         />
       </div>
 
@@ -50,9 +54,11 @@
             name="listing[price]"
             id="price"
             placeholder="eg- 1000"
-            type="number"
+        
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Enter a valid price!</div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -63,7 +69,9 @@
             placeholder="eg- India"
             type="text"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Country name should be valid</div>
         </div>
       </div>
 
@@ -76,7 +84,9 @@
           placeholder="eg- Mumbai, Maharashtra"
           type="text"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Location should be valid</div>
       </div>
 
       <div class="d-grid">
