@@ -8,7 +8,7 @@ const Review = require('../models/review.js');
 
 // ------------------- VALIDATORS -------------------
 const validateListing = (req, res, next) => {
-    const { error } = listingSchema.validate(req.body);
+    const { error } = listingSchema.validate(req.body); // <-- validate the whole body
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -17,15 +17,6 @@ const validateListing = (req, res, next) => {
     }
 };
 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-};
 
 // ------------------- ROUTES -------------------
 
@@ -35,24 +26,42 @@ router.get("/", wrapAsync(async (req, res) => {
     res.render("listings/index.ejs", { allListings });
 }));
 
+// ...existing code...
+// Create New Listing
+router.post("/", validateListing, wrapAsync(async (req, res) => {
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+    req.flash("success", `✅ Created new listing: ${newListing.title}`);
+    res.redirect("/listings");
+}));
+
+
+// ...existing code...
+
 // New Listing Form
 router.get("/new", (req, res) => {
     res.render("listings/new.ejs");
 });
 
-// Create New Listing
-router.post("/", validateListing, wrapAsync(async (req, res) => {
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings");
-}));
+// // Create New Listing
+// router.post("/", validateListing, wrapAsync(async (req, res) => {
+//     const newListing = new Listing(req.body.listing);
+//     await newListing.save();
+//     res.redirect("/listings");
+// }));
+
+
+
+
 
 // Show Specific Listing (with reviews)
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");
     if (!listing) {
-        throw new ExpressError("Listing not found", 404);
+        req.flash("error", "Listing not available");
+        res.redirect("/listings");
+        // throw new ExpressError("Listing not found", 404);
     }
     res.render("listings/show.ejs", { listing });
 }));
@@ -62,7 +71,9 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     if (!listing) {
-        throw new ExpressError("Listing not found", 404);
+        req.flash("error", "Listing not available");
+        res.redirect("/listings");
+        // throw new ExpressError("Listing not found", 404);
     }
     res.render("listings/edit.ejs", { listing });
 }));
@@ -71,6 +82,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
 router.put("/:id", validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    req.flash("success", `✅ Updated listing: ${req.body.listing.title}`);
     res.redirect(`/listings/${id}`);
 }));
 
@@ -79,35 +91,12 @@ router.delete("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);
     if (deletedListing) {
-        console.log(`✅ Deleted listing: ${deletedListing.title} (${deletedListing._id})`);
+        req.flash("success", `✅ Deleted listing: ${deletedListing.title}`);
     } else {
-        console.log(`⚠️ No listing found with ID: ${id}`);
+        req.flash("success", `⚠️ No listing found with ID: ${id}`);
     }
     res.redirect("/listings");
 }));
 
-// ------------------- REVIEWS -------------------
-
-// Add a review to a listing
-router.post("/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
-    if (!listing) {
-        throw new ExpressError("Listing not found", 404);
-    }
-    const review = new Review(req.body.review);
-    listing.reviews.push(review);
-    await review.save();
-    await listing.save();
-    res.redirect(`/listings/${id}`);
-}));
-
-// Delete a review from a listing
-router.delete("/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listings/${id}`);
-}));
 
 module.exports = router;

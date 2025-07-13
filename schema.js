@@ -1,20 +1,43 @@
-const Joi = require('joi');
+// const Joi = require('joi');
+
+// module.exports.listingSchema = Joi.object({
+//     listing: Joi.object({
+//         title: Joi.string().required(),
+//         description: Joi.string().required(),
+//         price: Joi.number().required().min(0),
+//         location: Joi.string().required(),
+//         country: Joi.string().required(),
+//         image: Joi.string().uri().allow('')
+//     }).required(),
+// });
+
+
+// module.exports.reviewSchema = Joi.object({
+//     review: Joi.object({
+//         comment: Joi.string().required(),
+//         rating: Joi.number().required().min(1).max(5)
+//     }).required()
+// });
+
+const Joi = require("joi");
 
 module.exports.listingSchema = Joi.object({
-    listing: Joi.object({
-        title: Joi.string().required(),
-        description: Joi.string().required(),
-        price: Joi.number().required().min(0),
-        location: Joi.string().required(),
-        country: Joi.string().required(),
-        image: Joi.string().uri().allow('')
-    }).required(),
+  listing: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().required().min(0),
+    location: Joi.string().required(),
+    country: Joi.string().required(),
+    image: Joi.object({
+      url: Joi.string().uri().allow('').optional(), // allow empty string
+      filename: Joi.string().allow('').optional()
+    }).optional()
+  }).required()
 });
 
-
 module.exports.reviewSchema = Joi.object({
-    review: Joi.object({
-        comment: Joi.string().required(),
-        rating: Joi.number().required().min(1).max(5)
-    }).required()
+  review: Joi.object({
+    rating: Joi.number().min(1).max(5).required(),
+    comment: Joi.string().required()
+  }).required()
 });
