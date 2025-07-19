@@ -1,29 +1,115 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 2rem;
+    align-items: center;
+    background: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 2rem;
+  }
 
-<h3 class="mb-4 fw-semibold">Explore Nearby Stays</h3>
+  .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s;
+    
+  }
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+  .filter i {
+    font-size: 1.4rem;
+    margin-bottom: 0.2rem;
+    color: #ff385c;
+  }
+
+  .filter:hover {
+    color: #ff385c;
+  }
+
+  .tax-toggle {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    background-color: #f7f7f7;
+    font-size: 0.9rem;
+    color: #222;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    width: fit-content;
+    display: flex;
+    align-items: center;
+  }
+
+  .tax-info {
+    display: none;
+    color: #888;
+    font-size: 0.9rem;
+    margin-left: 0.3rem;
+  }
+</style>
+
+<div id="filters">
+  <div class="filter"><i class="fa-solid fa-fire"></i><span>Trending</span></div>
+  <div class="filter"><i class="fa-solid fa-bed"></i><span>Rooms</span></div>
+  <div class="filter"><i class="fa-solid fa-mountain-city"></i><span>Iconic Cities</span></div>
+  <div class="filter"><i class="fa-solid fa-mountain"></i><span>Mountain</span></div>
+  <div class="filter"><i class="fa-solid fa-fort-awesome"></i><span>Castle</span></div>
+  <div class="filter"><i class="fa-solid fa-snowflake"></i><span>Arctic</span></div>
+  <div class="filter"><i class="fa-solid fa-campground"></i><span>Camping</span></div>
+  <div class="filter"><i class="fa-solid fa-cow"></i><span>Farms</span></div>
+  <div class="filter"><i class="fa-solid fa-tree"></i><span>Treehouses</span></div>
+  <div class="filter"><i class="fa-solid fa-umbrella-beach"></i><span>Beach</span></div>
+  <div class="filter"><i class="fa-solid fa-house"></i><span>Homes</span></div>
+  
+
+  <div class="tax-toggle">
+    <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+      <label class="form-check-label" for="switchCheckDefault">Display Taxes</label>
+    </div>
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3">
   <% for (let listing of allListings) { %>
     <div class="col">
       <div class="card listing-card border-0 shadow-sm h-100">
-
-        <!-- Image with link -->
         <a href="/listings/<%= listing._id %>" class="listing-link">
           <div class="image-container">
             <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" />
           </div>
         </a>
-
-        <!-- Text Body -->
         <div class="card-body px-3 pb-3">
-          <p class="card-title fw-semibold mb-1 text-dark"><%= listing.title %></p>
+          <p class="card-title fw-semibold mb-1 text-dark">
+            <%= listing.title %>
+          </p>
           <p class="card-text text-muted mb-0">
             ₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / night
+            <i class="tax-info"> &nbsp;&nbsp;+18% GST</i>
           </p>
         </div>
-
       </div>
     </div>
   <% } %>
 </div>
+
+<script>
+  const taxSwitch = document.getElementById("switchCheckDefault");
+  taxSwitch.addEventListener("click", () => {
+    const taxInfos = document.getElementsByClassName("tax-info");
+    for (const info of taxInfos) {
+      info.style.display = taxSwitch.checked ? "inline" : "none";
+    }
+  });
+</script>

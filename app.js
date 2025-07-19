@@ -1,3 +1,10 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+
+}
+
+
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -7,6 +14,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -16,9 +24,12 @@ const listingsRouter = require("./routes/listings.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 // MongoDB Connection
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+
+const dbUrl = process.env.ATLASDB_URL;
+
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 main()
   .then(() => console.log("✅ Connected to MongoDB"))
@@ -32,9 +43,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret : process.env.SECRET, // Use your secret from .env
+  },
+  touchAfter: 24 * 3600, // 24 hours
+}); 
+
+store.on("error", function (e) {
+  console.error("Session Store Error in mongodb", e);
+});
+
 // Session Middleware
 const sessionOptions = {
-    secret: "mysupersecretcode",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -45,9 +70,11 @@ const sessionOptions = {
     },
 };
 
-app.get("/", (req, res) => {
-  res.send("Welcome to Wanderlust!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome to Wanderlust!");
+// });
+
+ 
 
 app.use(session(sessionOptions));  
 app.use(flash());
@@ -79,23 +106,15 @@ app.use((req, res, next) => {
 
 
 
+
+
 // Use Listings Router
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 // Use User Router
 app.use("/", userRouter);
 
-
-
-//fake user authentication middleware
-// app.get("/fakeUser", async (req, res) => {
-//   const user = new User({ 
-//   email: "studentt@gmail.com",
-//   username: "studdent2",
-//   });
-//   const registeredUser =await User.register(user, "password123");
-//   res.send(`Fake user created: ${registeredUser.username}`);
-// });
+;
 
 // Handle Unmatched Routes
 app.all("*", (req, res, next) => {

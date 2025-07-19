@@ -5,6 +5,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
+const { string } = require("joi");
 
 const listingSchema = new Schema({
     title: {
@@ -13,12 +14,15 @@ const listingSchema = new Schema({
     },
     description: String,
     image: {
-        filename:{type: String , default : "listingimage"},
-        url: {
-            type: String,
-            default: "https://unsplash.com/photos/a-room-with-a-lot-of-chairs-and-tables-avkWNMVh9Z8",
+        url: String,
+        filename: String,
 
-        },
+        // filename:{type: String , default : "listingimage"},
+        // url: {
+        //     type: String,
+        //     default: "https://unsplash.com/photos/a-room-with-a-lot-of-chairs-and-tables-avkWNMVh9Z8",
+
+        // },
         // default: "https://unsplash.com/photos/a-room-with-a-lot-of-chairs-and-tables-avkWNMVh9Z8",
         // set: (v) =>
         //     v === ""
