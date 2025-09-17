@@ -2,9 +2,9 @@
 **AirStay** – Full-Stack Airbnb Clone  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
-[![GitHub issues](https://img.shields.io/github/issues/Deepakkumar5570/AirStay)](https://github.com/YOUR_USERNAME/AirStay/issues)  
-[![GitHub stars](https://img.shields.io/github/stars/Deepakkumar5570/AirStay?style=social)](https://github.com/YOUR_USERNAME/AirStay/stargazers)  
-[![GitHub forks](https://img.shields.io/github/forks/Deepakkumar5570/AirStay?style=social)](https://github.com/YOUR_USERNAME/AirStay/network)  
+[![GitHub issues](https://img.shields.io/github/issues/Deepakkumar5570/AirStay)](https://github.com/Deepakkumar5570/AirStay/issues)  
+[![GitHub stars](https://img.shields.io/github/stars/Deepakkumar5570/AirStay?style=social)](https://github.com/Deepakkumar5570/AirStay/stargazers)  
+[![GitHub forks](https://img.shields.io/github/forks/Deepakkumar5570/AirStay?style=social)](https://github.com/Deepakkumar5570/AirStay/network)  
 
 ---
 
