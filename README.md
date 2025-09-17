@@ -10,7 +10,7 @@
 
 ## 🌐 Live Demo
 
-Check out the deployed app here: [AirStay on Render](YOUR_RENDER_URL_HERE)
+Check out the deployed app here: [AirStay on Render](https://airstay-web.onrender.com/)
 
 ---
 
@@ -131,3 +131,6 @@ AirStay is deployed on **Render**:
 ## 📄 License
 
 This project is licensed under the **MIT License**.
+##
+Copyright©️ Deepakkumar5570 Inc. All rights reserved.
+
